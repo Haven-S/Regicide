@@ -33,6 +33,8 @@ var enemyInfoVis = [0, 0, 0];
 
 var win=0;
 
+var cardWidth=146.4;
+var cardHeight=204.8;
 
 // stages:
 // 0 preparation stage
@@ -169,6 +171,11 @@ function changeNum(Type, playAnimate) {
             if (preNum != pileNum && playAnimate == 1) {
                 //animate
                 var left = parseInt(getLeft(objCard.parentNode)) - 50;
+                if(Type==3)
+                {
+                    objCard.children[0].children[0].style.left = '0';
+                    objCard.children[0].children[0].style.top=-4*cardHeight+'px';
+                }
                 FullAnimate(objCard, left, getTop(objCard), objCard.parentNode, mode, 1, 10);
             }
             if (step > 0)
@@ -336,9 +343,11 @@ function setEnemyCard() {
         enemyPileNum--;
         changeNum(2, 0);
         var card = document.querySelector('.enemyPile').getElementsByClassName('card')[0];
-        card.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
+        card.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
+        card.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
         var target = document.querySelector('.enemy').getElementsByClassName('bg')[0];
-        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
+        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
+        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
         FullAnimate(card, getLeft(card), getTop(card), target, 1, 1, 10, function () {
             reloadEnemyIfo(0);
             reloadEnemyIfo(1);
@@ -370,10 +379,12 @@ function setHandCard(drawNum, callback) {
         else {
             var currentCard = drawPile.shift();
             hand.push(currentCard);
-            card.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
+            card.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
+            card.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
             var target = document.querySelector('.hand').getElementsByClassName('card')[handNum];
             target.style.visibility = 'hidden';
-            target.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
+            target.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
+            target.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
             target.setAttribute('data-point', '' + currentCard);
             handNum++;
 
@@ -404,7 +415,8 @@ function showCard() {
         // console.log(index);
         var target = visCds[i];
         card.style.visibility = 'hidden';
-        target.getElementsByClassName('cardFront')[0].children[0].src = card.getElementsByClassName('cardFront')[0].children[0].src;
+        target.getElementsByClassName('cardFront')[0].children[0].style.top = card.getElementsByClassName('cardFront')[0].children[0].style.top;
+        target.getElementsByClassName('cardFront')[0].children[0].style.left = card.getElementsByClassName('cardFront')[0].children[0].style.left;
         setTimeout(AutoAnimate(card, getLeft(card), getTop(card), target, 2, 1, 20, eVis(target)), 300);
     }
 
@@ -455,7 +467,8 @@ function refreshHand() {
                 var currentCard = cards[j];
                 var target = cards[idx];
                 currentCard.style.visibility = 'hidden';
-                target.getElementsByClassName('cardFront')[0].children[0].src = currentCard.getElementsByClassName('cardFront')[0].children[0].src;
+                target.getElementsByClassName('cardFront')[0].children[0].style.top = currentCard.getElementsByClassName('cardFront')[0].children[0].style.top;
+                target.getElementsByClassName('cardFront')[0].children[0].style.left = currentCard.getElementsByClassName('cardFront')[0].children[0].style.left;
                 target.setAttribute('data-point', currentCard.dataset.point);
 
                 FullAnimate(currentCard, getLeft(currentCard), getTop(currentCard), target, 2, 1, 40);
@@ -710,7 +723,7 @@ function stageN1() {
         gameState.currentState = 0;
         setHandCard(maxHandNum);
         gameState.transition();
-    }, 7000);
+    }, 8000);
 }
 
 function stage0() {
@@ -914,7 +927,7 @@ function erase(){
 
 window.addEventListener('load', function () {
 
-
+    
     var enemyCard = document.getElementsByClassName('enemy')[0].getElementsByClassName('card')[0];
     enemyCard.addEventListener('click', function () {
         enemyCard.style.top = '0';
@@ -1112,7 +1125,6 @@ window.addEventListener('load', function () {
                     specialCard.style.top='0';
                 },1000);
             }
-            console.log(gameState.currentState);
         }
     });
 

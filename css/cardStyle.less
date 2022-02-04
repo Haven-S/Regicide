@@ -154,12 +154,21 @@ div{
         height: 100%;
         border-radius: 8px;
         overflow: hidden;
+    }
+    .cardBack{
         img{
             width: 100%;
             height: 100%;
         }
     }
     .cardFront{
+        img{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: (@originalWidth/@imageScale)*13;
+            height: (@originalHeight/@imageScale)*5;
+        }
         transform: rotateY(180deg);
     }
 }
@@ -208,6 +217,15 @@ div{
 }
 .specialPile{
     display: none;
+    .card{
+        transform: rotateY(180deg);
+        .cardFront{
+            img{
+                top: -(@originalHeight/@imageScale)*4;
+                left: 0;
+            }
+        }
+    }
 }
 .pileArea .specialPileArea{
     flex: 0;
@@ -296,12 +314,7 @@ div{
 }
 
 //卡牌
-.specialPile .card{
-    transform: rotateY(180deg);
-    // &:hover{
-    //     transform: translateY(-5px) rotateY(180deg);
-    // }
-}
+
 
 
 .enemy .card{

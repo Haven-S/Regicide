@@ -38,7 +38,6 @@ function FullAnimate(obj, left, top, targetObj, mode, speed, idx, cb) {
     if (mode == 2 || mode == 3) {
         newobj.style.transform = 'rotateY(180deg)';
     }
-
     newobj.style.zIndex = idx + '';
     newobj.style.left = left + 'px';
     newobj.style.top = top + 'px';

@@ -131,13 +131,19 @@ div {
   border-radius: 8px;
   overflow: hidden;
 }
-.card .cardBack img,
-.card .cardFront img {
+.card .cardBack img {
   width: 100%;
   height: 100%;
 }
 .card .cardFront {
   transform: rotateY(180deg);
+}
+.card .cardFront img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1903.2px;
+  height: 1024px;
 }
 .pile {
   margin: 0 auto;
@@ -179,6 +185,13 @@ div {
 }
 .specialPile {
   display: none;
+}
+.specialPile .card {
+  transform: rotateY(180deg);
+}
+.specialPile .card .cardFront img {
+  top: -819.2px;
+  left: 0;
 }
 .pileArea .specialPileArea {
   flex: 0;
@@ -257,9 +270,6 @@ div {
 .Vis .card:nth-child(10) {
   left: 140px;
   z-index: 8;
-}
-.specialPile .card {
-  transform: rotateY(180deg);
 }
 .enemy .card {
   visibility: hidden;
