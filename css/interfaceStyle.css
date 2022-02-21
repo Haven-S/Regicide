@@ -1,7 +1,6 @@
 body {
   background-color: #eee;
   perspective: 800px;
-  perspective-origin: 50% 50%;
   min-width: 1028px;
 }
 .main {
