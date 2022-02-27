@@ -31,10 +31,9 @@ var iconVis = [0, 0];
 
 var enemyInfoVis = [0, 0, 0];
 
-var win=0;
+var win = 0;
 
-var cardWidth=146.4;
-var cardHeight=204.8;
+var PowerList=['梅花','方片','红桃','黑桃'];
 
 // stages:
 // 0 preparation stage
@@ -171,11 +170,6 @@ function changeNum(Type, playAnimate) {
             if (preNum != pileNum && playAnimate == 1) {
                 //animate
                 var left = parseInt(getLeft(objCard.parentNode)) - 50;
-                if(Type==3)
-                {
-                    objCard.children[0].children[0].style.left = '0';
-                    objCard.children[0].children[0].style.top=-4*cardHeight+'px';
-                }
                 FullAnimate(objCard, left, getTop(objCard), objCard.parentNode, mode, 1, 10);
             }
             if (step > 0)
@@ -329,11 +323,10 @@ function reloadEnemyIfo(Type) {
 }
 
 function setEnemyCard() {
-    if(enemyPile.length!=0)
-    {
+    if (enemyPile.length != 0) {
         var currentCard = enemyPile.shift();
         enemyPoint = currentCard;
-        enemyPower = parseInt((currentCard-1) / 13);
+        enemyPower = parseInt((currentCard - 1) / 13);
         switch (currentCard % 13) {
             case 11: enemyAttack = 10; enemyHeart = 20; break;
             case 12: enemyAttack = 15; enemyHeart = 30; break;
@@ -343,19 +336,17 @@ function setEnemyCard() {
         enemyPileNum--;
         changeNum(2, 0);
         var card = document.querySelector('.enemyPile').getElementsByClassName('card')[0];
-        card.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
-        card.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
+        card.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
         var target = document.querySelector('.enemy').getElementsByClassName('bg')[0];
-        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
-        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
+        target.parentNode.getElementsByClassName('card')[0].getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
         FullAnimate(card, getLeft(card), getTop(card), target, 1, 1, 10, function () {
             reloadEnemyIfo(0);
             reloadEnemyIfo(1);
             target.parentNode.getElementsByClassName('card')[0].style.visibility = 'visible';
         });
     }
-    else{
-        win=1;
+    else {
+        win = 1;
     }
 }
 //状态
@@ -379,12 +370,10 @@ function setHandCard(drawNum, callback) {
         else {
             var currentCard = drawPile.shift();
             hand.push(currentCard);
-            card.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
-            card.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
+            card.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
             var target = document.querySelector('.hand').getElementsByClassName('card')[handNum];
             target.style.visibility = 'hidden';
-            target.getElementsByClassName('cardFront')[0].children[0].style.left = -((currentCard-1)%13)*cardWidth+'px';
-            target.getElementsByClassName('cardFront')[0].children[0].style.top = -(parseInt((currentCard-1)/13))*cardHeight+'px';
+            target.getElementsByClassName('cardFront')[0].children[0].src = './images/Front (' + currentCard + ').png';
             target.setAttribute('data-point', '' + currentCard);
             handNum++;
 
@@ -406,7 +395,7 @@ function eVis(e) {
 
 
 function showCard() {
-    var len=selectedCards.length;
+    var len = selectedCards.length;
     var handCds = document.querySelector('.hand').getElementsByClassName('card');
     var visCds = document.querySelector('.Vis').getElementsByClassName('card');
     for (var i = 0; i < len; i++) {
@@ -415,8 +404,7 @@ function showCard() {
         // console.log(index);
         var target = visCds[i];
         card.style.visibility = 'hidden';
-        target.getElementsByClassName('cardFront')[0].children[0].style.top = card.getElementsByClassName('cardFront')[0].children[0].style.top;
-        target.getElementsByClassName('cardFront')[0].children[0].style.left = card.getElementsByClassName('cardFront')[0].children[0].style.left;
+        target.getElementsByClassName('cardFront')[0].children[0].src = card.getElementsByClassName('cardFront')[0].children[0].src;
         setTimeout(AutoAnimate(card, getLeft(card), getTop(card), target, 2, 1, 20, eVis(target)), 300);
     }
 
@@ -425,7 +413,7 @@ function showCard() {
 
     for (var i = 0; i < len; i++) {
         hand.splice(hand.indexOf(selectedCards[i]), 1);
-        
+
         handNum--;
         if (selectedCards[i] >= 53) {
             selectedCardEffects[4] = 1;
@@ -467,8 +455,7 @@ function refreshHand() {
                 var currentCard = cards[j];
                 var target = cards[idx];
                 currentCard.style.visibility = 'hidden';
-                target.getElementsByClassName('cardFront')[0].children[0].style.top = currentCard.getElementsByClassName('cardFront')[0].children[0].style.top;
-                target.getElementsByClassName('cardFront')[0].children[0].style.left = currentCard.getElementsByClassName('cardFront')[0].children[0].style.left;
+                target.getElementsByClassName('cardFront')[0].children[0].src = currentCard.getElementsByClassName('cardFront')[0].children[0].src;
                 target.setAttribute('data-point', currentCard.dataset.point);
 
                 FullAnimate(currentCard, getLeft(currentCard), getTop(currentCard), target, 2, 1, 40);
@@ -680,9 +667,8 @@ function discard() {
     var target = document.querySelector('.discardPile').getElementsByClassName('card')[0];
     var cards = document.querySelector('.hand').getElementsByClassName('card');
 
-    var newArray=[];
-    for(var i = 0; i < len; i++)
-    {
+    var newArray = [];
+    for (var i = 0; i < len; i++) {
         newArray.push(selectedCards[i]);
     }
 
@@ -698,8 +684,7 @@ function discard() {
     }
     changeNum(1);
 
-    for(var i=0;i<len;i++)
-    {
+    for (var i = 0; i < len; i++) {
         hand.splice(hand.indexOf(newArray[i]), 1);
         handNum--;
     }
@@ -723,7 +708,7 @@ function stageN1() {
         gameState.currentState = 0;
         setHandCard(maxHandNum);
         gameState.transition();
-    }, 8000);
+    }, 7000);
 }
 
 function stage0() {
@@ -731,14 +716,13 @@ function stage0() {
 
     setEnemyCard();
 
-    if(win==0)
-    {
+    if (win == 0) {
         setTimeout(function () {
             gameState.currentState = 1;
             gameState.transition();
         }, 5000);
     }
-    else{
+    else {
         setTimeout(function () {
             gameState.currentState = 6;
             gameState.transition();
@@ -754,7 +738,7 @@ function stage1() {
 }
 
 function stage2() {
-    erase();
+    eraseRemind();
     IconInVisible(0);
     showCard();
 
@@ -789,24 +773,24 @@ function stage4() {
     document.querySelector('.enemy').getElementsByClassName('card')[0].style.boxShadow = '0 4px 8px 0 rgba(247, 83, 83, 0.2), 0 6px 20px 0 rgba(247, 83, 83, 0.2)';
     document.querySelector('.enemy').getElementsByClassName('card')[0].style.left = '-50px';
     enemyInfoVisible(0);
-    var pointCnt=0;
+    var pointCnt = 0;
     for (var i = 0; i < handNum; i++) {
         pointCnt += pointCount(hand[i]);
-        
+
     }
-    if (pointCnt < enemyAttack && specialPileNum==0) {
+    if (pointCnt < enemyAttack && specialPileNum == 0) {
         setTimeout(function () {
             gameState.currentState = 6;
             document.querySelector('.enemy').getElementsByClassName('card')[0].style.boxShadow = '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2)';
             document.querySelector('.enemy').getElementsByClassName('card')[0].style.left = '0';
-            specialPileNum=-1;
+            specialPileNum = -1;
             gameState.transition();
-        },1000);
+        }, 1000);
     }
 }
 
 function stage5() {
-    erase();
+    eraseRemind();
     discard();
     setTimeout(function () {
         refreshHand();
@@ -815,8 +799,7 @@ function stage5() {
     }, 2000);
 }
 
-function stage6()
-{
+function stage6() {
     // var s='Congratulation!You win the game!';
     // if(playerNumber==1)
     // {
@@ -835,24 +818,19 @@ function stage6()
     // }
     // alert(s);
     // alert('Refresh to Restart!')
-    var s='胜利！';
-    if(playerNumber==1)
-    {
-        if(specialPileNum==2)
-        {
-            s="金牌胜利！！！";
+    var s = '胜利！';
+    if (playerNumber == 1) {
+        if (specialPileNum == 2) {
+            s = "金牌胜利！！！";
         }
-        else if(specialPileNum==1)
-        {
-            s="银牌胜利！！";
+        else if (specialPileNum == 1) {
+            s = "银牌胜利！！";
         }
-        else if(specialPileNum==0)
-        {
-            s="铜牌胜利！";
+        else if (specialPileNum == 0) {
+            s = "铜牌胜利！";
         }
-        else
-        {
-            s='失败';
+        else {
+            s = '失败';
         }
     }
     alert(s);
@@ -905,20 +883,36 @@ var gameState = {
 
 };
 
-
-
-function remind(type) {
-    var noticeBoard=document.querySelector('.noticeBoard');
-    var info=noticeBoard.children[0];
-    info.innerHTML='弃牌阶段';
-    if(type==0)
-        info.innerHTML='出牌阶段';
-    noticeBoard.style.display='block';
+function updateRemind1(){
+    var info1 = document.querySelector('.noticeBoard').children[1];
+    info1.innerHTML='已选点数：'+selectedCardPoint;
 }
 
-function erase(){
-    var noticeBoard=document.querySelector('.noticeBoard');
-    noticeBoard.style.display='none';
+function remind(type) {
+    var noticeBoard = document.querySelector('.noticeBoard');
+    noticeBoard.style.left=getLeft(document.querySelector('.specialPile')
+    
+    )+'px';
+    var info0 = noticeBoard.children[0];
+    var info2 = noticeBoard.children[2];
+
+    info0.innerHTML = '弃牌阶段';
+    info2.style.display='none';
+    if (type == 0)
+    {
+        info0.innerHTML = '出牌阶段';
+        info2.innerHTML = PowerList[enemyPower]+'无效';
+        info2.style.display='block';
+    }
+
+    updateRemind1();
+
+    noticeBoard.style.display = 'block';
+}
+
+function eraseRemind() {
+    var noticeBoard = document.querySelector('.noticeBoard');
+    noticeBoard.style.display = 'none';
 }
 
 
@@ -927,7 +921,7 @@ function erase(){
 
 window.addEventListener('load', function () {
 
-    
+
     var enemyCard = document.getElementsByClassName('enemy')[0].getElementsByClassName('card')[0];
     enemyCard.addEventListener('click', function () {
         enemyCard.style.top = '0';
@@ -1035,6 +1029,7 @@ window.addEventListener('load', function () {
                         IconInVisible(1);
                     }
                 }
+                updateRemind1();
                 // console.log(selectedCards);
                 //247, 83, 83
             }
@@ -1059,14 +1054,29 @@ window.addEventListener('load', function () {
                 handCard[i].setAttribute('data-selected', '0');
             }
             IconInVisible(1);
-            IconVisible(0);
+            if(gameState.currentState==4)
+            {
+                if(enemyAttack==0)
+                {
+                    IconVisible(0);
+                }
+                else{
+                    IconInVisible(0);
+                }
+            }
+            else{
+                IconVisible(0);
+            }
+            updateRemind1();
         }
     })
+
+    var confirm = 0;
 
     var confirmIcon = document.querySelector('.confirmIcon');
     confirmIcon.addEventListener('click', function () {
         if (gameState.currentState == 1 || gameState.currentState == 4) {
-            
+
             selectedLegal = true;
             for (var i = 0; i < handCard.length; i++) {
                 handCard[i].style.top = 0;
@@ -1074,11 +1084,44 @@ window.addEventListener('load', function () {
             }
             IconInVisible(1);
             IconInVisible(0);
+            
             if (gameState.currentState == 1) {
-                gameState.currentState = 2;
+                if (selectedCardPoint == 0) {
+                    if (confirm == 0) {
+                        alert('未选择卡牌，确定要跳过出牌阶段吗？'+'\n'+'(请重新确认)');
+                        cancelIcon.click();
+                        confirm++;
+                    }
+                    else {
+                        confirm = 0;
+                        gameState.currentState = 2;
+                    }
+                }
+
+                else {
+                    confirm = 0;
+                    gameState.currentState = 2;
+                }
+
             }
             if (gameState.currentState == 4) {
-                gameState.currentState = 5;
+                if (enemyAttack == 0) {
+                    if (confirm == 0 && selectedCardPoint != 0) {
+                        alert('敌人攻击力为0，确定要弃牌吗？'+'\n'+'(请重新确认)')
+                        cancelIcon.click();
+                        confirm++;
+                    }
+                    else {
+                        confirm = 0;
+                        gameState.currentState = 5;
+                    }
+
+                }
+                else {
+                    confirm = 0;
+                    gameState.currentState = 5;
+                }
+
             }
 
 
@@ -1094,37 +1137,35 @@ window.addEventListener('load', function () {
     })
 
 
-    var specialCard=this.document.querySelector('.specialPile').getElementsByClassName('card')[0];
-    specialCard.addEventListener('click',function(){
-        if(gameState.currentState==1||gameState.currentState==4)
-        {
-            if(specialPileNum>0)
-            {
-                selectedCards.length=0;
+    var specialCard = this.document.querySelector('.specialPile').getElementsByClassName('card')[0];
+    specialCard.addEventListener('click', function () {
+        if (gameState.currentState == 1 || gameState.currentState == 4) {
+            if (specialPileNum > 0) {
+                selectedCards.length = 0;
                 selectedCardPoint = 0;
                 selectedLegal = true;
                 for (var i = 0; i < handCard.length; i++) {
                     handCard[i].style.top = 0;
                     handCard[i].setAttribute('data-selected', '0');
                 }
-                for(var i = 0; i < hand.length; i++)
-                {
+                for (var i = 0; i < hand.length; i++) {
                     selectedCards.push(hand[i]);
                 }
                 discard();
                 IconInVisible(1);
                 IconInVisible(0);
-                
-                specialCard.style.top='-15px';
+
+                specialCard.style.top = '-15px';
 
                 specialPileNum--;
                 changeNum(3);
 
-                setTimeout(function(){
+                setTimeout(function () {
                     setHandCard(maxHandNum);
-                    specialCard.style.top='0';
-                },1000);
+                    specialCard.style.top = '0';
+                }, 1000);
             }
+            console.log(gameState.currentState);
         }
     });
 
